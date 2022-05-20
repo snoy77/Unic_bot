@@ -6,6 +6,7 @@ import random as rand
 import WordsLists as WL
 import BotStatusPrinter as BSP
 import telegainfo as TI
+import QueryAndAnsver as QA
 
 #----------------Инициализаци первых данных----------------
 ADMIN_ID = 1182327310
@@ -133,6 +134,13 @@ def message_going(message):
     BSP.printStatusBot(message_data, message_user, message_chat, message_text, 0)
 
     BSP.stopForDebug(0, "message_going - Попытка отправки ответа...", 0)
+
+    fastAnsver = QA.returnfastAnsver(message_text)
+    if fastAnsver != False:
+        going_message = fastAnsver[0]
+        bot.send_message(chat_id, going_message)
+        return
+
     #if  message_text.lower() == 'github' or message_text.lower() == "гитхаб":
     if  message_text.lower().replace('?','') in WL.getGit:
         going_message = "[Гитхаб этого бота:](https://github.com/snoy77/DND_Bot)"
