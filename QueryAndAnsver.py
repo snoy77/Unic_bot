@@ -17,3 +17,4 @@ def returnfastAnsver(message_text):
         if message_text in Q[0]:
             #Возвращаем список параметров ответа (в будущем будет больше параметров)
             return [Q[1]]
+    return False
