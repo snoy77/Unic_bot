@@ -12,7 +12,7 @@ import QueryAndAnsver as QA
 ADMIN_ID = 1182327310
 
 #----------------Инициализация бота----------------
-BSP.stopForDebug(0, 'Подключение к боту...')
+BSP.stopForDebug(0, '\n\nПодключение к боту...')
 bot = telebot.TeleBot(TI.token)
 BSP.stopForDebug(0, 'Подключение к боту... УСПЕШНО')
 
