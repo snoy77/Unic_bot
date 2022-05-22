@@ -2,7 +2,6 @@
 import DataBaseWorker as DBW
 
 
-
 def findSiteUrl(site_name, going_message):
     result = DBW.getSiteURL(site_name)
     if result == False:
@@ -15,8 +14,8 @@ QueryAndAnsver = [
 #1 - ответ на варианты запроса
 [["ответ"], "ответ"],
 [["0"], "1"],
-[["гитхаб", "гит", "твой гит", 'git', 'github'], findSiteUrl('git', 'Мой гит:')],
-[['мудл'], findSiteUrl('moodle', 'Мудл:')]
+[["гитхаб", "гит", "твой гит", 'git', 'github'], findSiteUrl, ('git', 'Мой гит:')],
+[['мудл'], findSiteUrl, ('moodle', 'Мудл:')]
 ]
 
 def returnfastAnsver(message_text):
@@ -26,5 +25,7 @@ def returnfastAnsver(message_text):
     for Q in QueryAndAnsver:
         if message_text in Q[0]:
             #Возвращаем список параметров ответа (в будущем будет больше параметров)
-            return [Q[1]]
+            if not isinstance(Q[1], list):
+                Q[1] = [Q[1](Q[2][0],Q[2][1])]
+            return Q[1]
     return False
