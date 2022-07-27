@@ -62,19 +62,29 @@ def message_going(message):
     BSP.printStatusBot(message_data, message_user, message_chat, message_text, 0)
 
     BSP.stopForDebug(0, "message_going - Попытка отправки ответа...", 0)
+    #--------------------------переделка--------------------------
 
-    fastAnsver = QA.returnfastAnsver(message_text)
-    if fastAnsver != False:
-        going_message = fastAnsver[0]
+    if message_text.lower().replace('?','') in ['жив', 'живой', "ты жив"]:
+        going_message = "Агась"
         bot.send_message(chat_id, going_message)
+        bot.send_sticker(chat_id, 'CAACAgEAAxkBAAPkYn5t2aAkAAGiipkFKzpGvXz4bsUcAAJaAAPArAgjmrw81VndF8IkBA')
     else:
-        if message_text.lower().replace('?','') in ['жив', 'живой', "ты жив"]:
-            going_message = "Агась"
-            bot.send_message(chat_id, going_message)
-            bot.send_sticker(chat_id, 'CAACAgEAAxkBAAPkYn5t2aAkAAGiipkFKzpGvXz4bsUcAAJaAAPArAgjmrw81VndF8IkBA')
-        else:
-            going_message = 'Не понял, разъясни почётче...'
-            bot.send_message(chat_id, going_message)
+        answer_object = QA.returnAnswer(message_text)
+        going_message = answer_object.text
+        bot.send_message(chat_id, going_message)
+    #-------------------------------------------------------------
+    #fastAnsver = QA.returnfastAnsver(message_text)
+    #if fastAnsver != False:
+    #    going_message = fastAnsver[0]
+    #    bot.send_message(chat_id, going_message)
+    #else:
+    #    if message_text.lower().replace('?','') in ['жив', 'живой', "ты жив"]:
+    #        going_message = "Агась"
+    #        bot.send_message(chat_id, going_message)
+    #        bot.send_sticker(chat_id, 'CAACAgEAAxkBAAPkYn5t2aAkAAGiipkFKzpGvXz4bsUcAAJaAAPArAgjmrw81VndF8IkBA')
+    #    else:
+    #        going_message = 'Не понял, разъясни почётче...'
+    #        bot.send_message(chat_id, going_message)
 
     BSP.printStatusBot(message_data, message_user, message_chat, going_message, 1)
 
