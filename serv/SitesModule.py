@@ -12,8 +12,9 @@ def getSite(message_text, AnswerObject):
 
     #Удалим тригерные слова для этой команды
     for e in _triger_word_get:
-        message_text.replace(e + " ", '')
+        message_text = message_text.replace(e + " ", '')
 
+    message_text = message_text.replace(' и ', ' ')
     message_text = message_text.lstrip()
     message_text = message_text.rstrip()
 
@@ -75,10 +76,10 @@ def setAnswerObject(message_text, AnswerObject):
     #Опрееделяем к какой команде относится запрос
     for e in _triger_word_add:
         if not message_text.find(e) == -1:
-            pass
+            return
     for e in _triger_word_open:
         if not message_text.find(e) == -1:
-            pass
+            return
 
     #В ином случае это будет команда запроса ссылки
     getSite(message_text, AnswerObject)
