@@ -1,17 +1,18 @@
 #Модуль дял работы с сайтами: запоминание ссылок, октрывание, и т.д.
 import DataBaseWorker as DBW
 
-_triger_word_add = [] #Слова для добавления ссылки в список
-_triger_word_open = [] #Слова для открытия ссылки
-_triger_word_get = ['дай'] #Слова для запроса ссылки
+_triger_word_add = ['добавь '] #Слова для добавления ссылки в список
+_triger_word_open = ['открой '] #Слова для открытия ссылки
+_triger_word_get = ['дай '] #Слова для запроса ссылки
 
 sites_cash = []
 
 def getSite(message_text, AnswerObject):
+    global _triger_word_get
 
     #Удалим тригерные слова для этой команды
     for e in _triger_word_get:
-        message_text.replace(e, '')
+        message_text.replace(e + " ", '')
 
     message_text = message_text.lstrip()
     message_text = message_text.rstrip()
