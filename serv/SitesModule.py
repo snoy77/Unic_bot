@@ -1,30 +1,22 @@
 #Модуль дял работы с сайтами: запоминание ссылок, октрывание, и т.д.
 import DataBaseWorker as DBW
 
-#-------------- шаблонные свойства и методы для микросвервисов -------------
-Trigers_words = ['ссылку на', "ссылка на", "ссылочка на", "ссылочку на",
-'сайт', "ссылка", "ссылку", "ссылочка", "ссылочку"]
+_triger_word_add = [] #Слова для добавления ссылки в список
+_triger_word_open = [] #Слова для открытия ссылки
+_triger_word_get = ['дай'] #Слова для запроса ссылки
 
-#является ли сообщение запросом для этого модуля.
-def isItToMe(message_text):
-    global _triger_word
-    message_text = message_text.lower()
-    message_words = message_text.split(' ')
-    for triger_word in Trigers_words:
-        if triger_word in message_words:
-            _triger_word = triger_word
-            return True
-    return False
+sites_cash = []
 
-def setAnswerObject(message_text, AnswerObject):
-    message_text = message_text.lower()
+def getSite(message_text, AnswerObject):
 
-    #Уберём слово-тригер и приведём аргументы - все возможные варианты названия сайта
-    #первый вариант
-    message_text = message_text.replace(_triger_word, '')
+    #Удалим тригерные слова для этой команды
+    for e in _triger_word_get:
+        message_text.replace(e, '')
+
     message_text = message_text.lstrip()
     message_text = message_text.rstrip()
 
+    #Подготовим все аргументы для запроса
     arguments = []
     arguments.append(message_text)
 
@@ -36,7 +28,6 @@ def setAnswerObject(message_text, AnswerObject):
 
     for word in message_words:
         arguments.append(word)
-    print("Слово тригер: " + _triger_word)
 
     #ПРЕОБРАЗОВАТЬ МОДУЛЬ ЗАПРОСОВ БАЗЫ ДАННЫХ
     #НА ПРОСТО ВЫПОЛНЕНИЕ ЗАПРОСОВ
@@ -50,8 +41,45 @@ def setAnswerObject(message_text, AnswerObject):
         AnswerObject.text = ''
         for res in result:
             AnswerObject.text += '[' + res[0] + '](' + res[1] + ')\n'
-#---------------------------------------------------------------------------
-_triger_word = ""
-sites_cash = []
+
 def addSiteToCash():
     pass
+
+
+#-------------- шаблонные свойства и методы для микросвервисов -------------
+Trigers_words = ['ссылку на', "ссылка на", "ссылочка на", "ссылочку на",
+'сайт', "ссылк", "ссылку", "ссылочка", "ссылочку",
+'ссылочк', 'сылк', 'сылочк']
+
+#является ли сообщение запросом для этого модуля.
+def isItToMe(message_text):
+    message_text = message_text.lower()
+
+    for triger_word in Trigers_words:
+        if not message_text.find(triger_word) == -1:
+            return True
+    return False
+
+def setAnswerObject(message_text, AnswerObject):
+
+    AnswerObject.text = 'Я пока так не умею, прости...'
+
+    #Уберём слово-тригер и отформатируем сообщение
+    #!!! Знак "?" для этого модуля не рекомуендуется удалять
+    message_text = message_text.lower()
+
+    for e in Trigers_words:
+        message_text = message_text.replace(e, '')
+
+    #Опрееделяем к какой команде относится запрос
+    for e in _triger_word_add:
+        if not message_text.find(e) == -1:
+            pass
+    for e in _triger_word_open:
+        if not message_text.find(e) == -1:
+            pass
+
+    #В ином случае это будет команда запроса ссылки
+    getSite(message_text, AnswerObject)
+
+#---------------------------------------------------------------------------
