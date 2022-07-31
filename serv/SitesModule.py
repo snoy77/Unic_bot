@@ -1,5 +1,6 @@
 #Модуль дял работы с сайтами: запоминание ссылок, октрывание, и т.д.
 import DataBaseWorker as DBW
+import BotStatusPrinter as BSP
 
 _triger_word_add = ['добавь '] #Слова для добавления ссылки в список
 _triger_word_open = ['открой '] #Слова для открытия ссылки
@@ -35,8 +36,8 @@ def getSite(message_text, AnswerObject):
     #ПРЕОБРАЗОВАТЬ МОДУЛЬ ЗАПРОСОВ БАЗЫ ДАННЫХ
     #НА ПРОСТО ВЫПОЛНЕНИЕ ЗАПРОСОВ
     #ЗАПРОСЫ ПЕРЕДВАТЬ ОТ СЮДА ТУДА
-    print(arguments)
-    result = DBW.return_query_result(get_query_get_text(arguments))
+    query_text = get_query_get_text(arguments)
+    result = DBW.return_query_result(query_text)
 
     if result == False:
         AnswerObject.text = 'Не знаю такой сайт'
@@ -57,10 +58,10 @@ def get_query_get_text(sites_name):
     for i in range(0, c):
         names = names + '\'' + sites_name[i] + '\''
         if not i == (c - 1):
-            names = site_names + ','
+            names = names + ','
     names = names + ')'
 
-    query_to_bd += site_names
+    query_to_bd += names
     return query_to_bd
 #--------------------------------------------------------------
 

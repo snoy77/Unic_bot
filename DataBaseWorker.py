@@ -17,6 +17,7 @@ def DBPrit(print_id, mes = ""):
 
 
 def return_query_result(query_to_bd):
+    DBPrit(0)
     try:
         with connect(
             host = TI.DB_host,
