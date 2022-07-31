@@ -7,14 +7,14 @@ _triger_word_get = ['дай '] #Слова для запроса ссылки
 
 sites_cash = []
 
+
 def getSite(message_text, AnswerObject):
     global _triger_word_get
 
     #Удалим тригерные слова для этой команды
     for e in _triger_word_get:
-        message_text = message_text.replace(e + " ", '')
+        message_text = message_text.replace(e, '')
 
-    message_text = message_text.replace(' и ', ' ')
     message_text = message_text.lstrip()
     message_text = message_text.rstrip()
 
@@ -22,6 +22,7 @@ def getSite(message_text, AnswerObject):
     arguments = []
     arguments.append(message_text)
 
+    message_text = message_text.replace(' и ', ' ')
     message_words = message_text.split(' ')
     try:
         message_words.remove(message_text)
@@ -35,7 +36,7 @@ def getSite(message_text, AnswerObject):
     #НА ПРОСТО ВЫПОЛНЕНИЕ ЗАПРОСОВ
     #ЗАПРОСЫ ПЕРЕДВАТЬ ОТ СЮДА ТУДА
     print(arguments)
-    result = DBW.getSiteURL(arguments)
+    result = DBW.return_query_result(get_query_get_text(arguments))
 
     if result == False:
         AnswerObject.text = 'Не знаю такой сайт'
@@ -47,11 +48,25 @@ def getSite(message_text, AnswerObject):
 def addSiteToCash():
     pass
 
+#----------------------- ЗАПРОСЫ -----------------------------
+def get_query_get_text(sites_name):
+    query_to_bd = "select goung_text, url from sites where name in "
+    names = '('
+
+    c =  len(sites_name)
+    for i in range(0, c):
+        names = names + '\'' + sites_name[i] + '\''
+        if not i == (c - 1):
+            names = site_names + ','
+    names = names + ')'
+
+    query_to_bd += site_names
+    return query_to_bd
+#--------------------------------------------------------------
 
 #-------------- шаблонные свойства и методы для микросвервисов -------------
-Trigers_words = ['ссылку на', "ссылка на", "ссылочка на", "ссылочку на",
-'сайт', "ссылк", "ссылку", "ссылочка", "ссылочку",
-'ссылочк', 'сылк', 'сылочк']
+Trigers_words = ['ссылку на ', "ссылка на ", "ссылочка на ", "ссылочку на ",
+'сайт ', "ссылку ", "ссылочка ", "ссылочку "]
 
 #является ли сообщение запросом для этого модуля.
 def isItToMe(message_text):

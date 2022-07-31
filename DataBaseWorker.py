@@ -16,18 +16,7 @@ def DBPrit(print_id, mes = ""):
         input("Остановка работы по ошибке...")
 
 
-def getSiteURL(sites_name):
-    DBPrit(0)
-    DBPrit(1, "вернуть ссылку")
-
-    site_names = '('
-    c =  len(sites_name)
-    for i in range(0, c):
-        site_names = site_names + '\'' + sites_name[i] + '\''
-        if not i == (c - 1):
-            site_names = site_names + ','
-    site_names = site_names + ')'
-
+def return_query_result(query_to_bd):
     try:
         with connect(
             host = TI.DB_host,
@@ -36,7 +25,6 @@ def getSiteURL(sites_name):
             database = TI.DB_name,
         ) as connection:
             print("> Успешно: " + str(connection))
-            query_to_bd = "select goung_text, url from sites where name in " + site_names
             with connection.cursor() as cursor:
                 print("> Запрос: \'" + query_to_bd + "\'...")
                 #Поулчаем резульатт по запросу
