@@ -36,7 +36,7 @@ def getSite(message_text, AnswerObject):
     #ПРЕОБРАЗОВАТЬ МОДУЛЬ ЗАПРОСОВ БАЗЫ ДАННЫХ
     #НА ПРОСТО ВЫПОЛНЕНИЕ ЗАПРОСОВ
     #ЗАПРОСЫ ПЕРЕДВАТЬ ОТ СЮДА ТУДА
-    query_text = get_query_get_text(arguments)
+    query_text = query_get_text(arguments)
     result = DBW.return_query_result(query_text)
 
     if result == False:
@@ -46,12 +46,24 @@ def getSite(message_text, AnswerObject):
         for res in result:
             AnswerObject.text += '[' + res[0] + '](' + res[1] + ')\n'
 
-def addSiteToCash():
+def addSite(message_text, AnswerObject):
+
+    for e in _triger_word_add:
+        message_text = message_text.replace(e, '')
+
+    
+
+    arg = []
+    query_text = query_add_text(arg)
+    res = DBW.return_query_result(query_text)
+
+
+
     pass
 
 #----------------------- ЗАПРОСЫ -----------------------------
-def get_query_get_text(sites_name):
-    query_to_bd = "select goung_text, url from sites where name in "
+def query_get_text(sites_name):
+    query_to_bd = "select name, url from sites where name in "
     names = '('
 
     c =  len(sites_name)
@@ -63,6 +75,15 @@ def get_query_get_text(sites_name):
 
     query_to_bd += names
     return query_to_bd
+
+def query_add_text(arg):
+    #arg[0] - имя сайта
+    #arg[1] - url
+
+    query_to_bd = "insert into sites ('url', 'name') values ("
+
+
+
 #--------------------------------------------------------------
 
 #-------------- шаблонные свойства и методы для микросвервисов -------------
