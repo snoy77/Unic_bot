@@ -1,6 +1,7 @@
 #Модуль осуществляет поиск запросов из списка запросов и выдачу овтета на них
 import DataBaseWorker as DBW
 import serv.SitesModule as SM
+import serv.MathModule as MM
 
 #------------- new algoritm ---------------------------
 #объект ответа
@@ -15,6 +16,8 @@ def returnAnswer(message_text):
     #Опрос микросервисов на возможность ответа
     if SM.isItToMe(message_text):
         answer_methods.append(SM.setAnswerObject)
+    if MM.isItToMe(message_text):
+        answer_methods.append(MM.setAnswerObject)
 
     if len(answer_methods) == 1:
         #------ ВРЕМЕННАЯ ПУСТЫШКА -----------

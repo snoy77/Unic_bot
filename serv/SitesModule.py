@@ -51,7 +51,7 @@ def addSite(message_text, AnswerObject):
     for e in _triger_word_add:
         message_text = message_text.replace(e, '')
 
-    
+
 
     arg = []
     query_text = query_add_text(arg)
@@ -88,7 +88,7 @@ def query_add_text(arg):
 
 #-------------- шаблонные свойства и методы для микросвервисов -------------
 Trigers_words = ['ссылку на ', "ссылка на ", "ссылочка на ", "ссылочку на ",
-'сайт ', "ссылку ", "ссылочка ", "ссылочку "]
+'сайт ', "ссылка ", "ссылку ", "ссылочка ", "ссылочку "]
 
 #является ли сообщение запросом для этого модуля.
 def isItToMe(message_text):
