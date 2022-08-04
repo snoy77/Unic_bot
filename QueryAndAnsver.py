@@ -4,21 +4,23 @@ import serv.SitesModule as SM
 import serv.MathModule as MM
 
 #------------- new algoritm ---------------------------
+serv_modules = [SM, MM]
+
 #объект ответа
 class AnswerClass:
     text = 'Не понял, разъясни почётче...'
 
 #Возвращает объект ответа
 def returnAnswer(message_text):
+    global modules
+
     AnswerObject = AnswerClass()
     answer_methods = []
 
     #Опрос микросервисов на возможность ответа
-    if SM.isItToMe(message_text):
-        answer_methods.append(SM.setAnswerObject)
-    if MM.isItToMe(message_text):
-        answer_methods.append(MM.setAnswerObject)
-
+    for e in serv_modules:
+        if e.isItToMe(message_text):
+            answer_methods.append(e.setAnswerObject)
     if len(answer_methods) == 1:
         #------ ВРЕМЕННАЯ ПУСТЫШКА -----------
         answer_methods[0](message_text, AnswerObject)
