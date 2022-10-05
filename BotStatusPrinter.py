@@ -18,3 +18,14 @@ def stopForDebug(individualStop, status_text = '', anywayWriteStatus = 1):
         return
     if anywayWriteStatus == 1:
         print(status_text)
+
+
+def ModuleMes(moduleName, mes):
+    print(' ' + moduleName + ': ' + mes)
+def SystemPrint(mes):
+    print(' MainModule: ' + mes)
+
+def SystemUnnowErrorPrint():
+    print('\n -----------------------------------------------------------------------------------')
+    print(' SYS ERROR: Работа бота прекращена по непредвиденным обстоятельствам. Перезагрузить?')
+    print(' -----------------------------------------------------------------------------------')

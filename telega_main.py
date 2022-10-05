@@ -7,13 +7,29 @@ import BotStatusPrinter as BSP
 import telegainfo as TI
 import QueryAndAnsver as QA
 
+_moduleName = 'telega_main'
+
+
 #----------------Инициализаци первых данных----------------
 ADMIN_ID = 1182327310
-
-#----------------Инициализация бота----------------
-BSP.stopForDebug(0, '\n\nПодключение к боту...')
+BSP.ModuleMes(_moduleName, 'Телеграм-соединение...')
 bot = telebot.TeleBot(TI.token)
-BSP.stopForDebug(0, 'Подключение к боту... УСПЕШНО')
+BSP.ModuleMes(_moduleName, 'Телеграм-соединение... УСПЕХ')
+
+
+
+BSP.ModuleMes(_moduleName, 'Инициализация функций...')
+
+
+def StartModule():
+    global bot
+    global _moduleName
+
+    #----------------Запуск бота----------------
+    BSP.ModuleMes(_moduleName, 'Чат -- ЗАПУСК')
+    bot.polling(none_stop=True, interval=0)
+    BSP.ModuleMes(_moduleName, 'Чат -- ПРЕКРАЩЕНИЕ РАБОТЫ')
+    BSP.stopForDebug(1)
 
 #----------------Определение некоторых методов----------------
 def getMessageChatMainInfo(chat):
@@ -23,7 +39,7 @@ def getMessageUserMainInfo(user):
 
 
 #----------------Определение событий----------------
-BSP.stopForDebug(0, 'Инициализация функций...')
+
 
 @bot.message_handler(commands=['debagon', 'debagoff'])
 def debag_enable(message):
@@ -90,12 +106,4 @@ def message_going(message):
 
     BSP.stopForDebug(0, "message_going Конец", 0)
 
-BSP.stopForDebug(0, 'Инициализация функций... УСПЕШНО', 1)
-
-
-#----------------Запуск бота----------------
-print('Работа бота...\n')
-bot.polling(none_stop=True, interval=0)
-print('\n\nРабота бота ЗАВЕРШЕНА')
-
-BSP.stopForDebug(1)
+BSP.ModuleMes(_moduleName, 'Инициализация функций... УСПЕХ')
