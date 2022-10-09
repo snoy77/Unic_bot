@@ -43,12 +43,19 @@ def isItToMe(message_text):
 
 
 def setAnswerObject(message_text, AnswerObject):
+    global operator
     AnswerObject.text = 'Я пока так не умею, прости...'
 
     #Уберём слово-тригер и отформатируем сообщение
     #!!! Знак "?" для этого модуля не рекомуендуется удалять
     message_text = message_text.lower()
+    for e in operators:
+        if not message_text.find(e) == -1:
+            operator = e
 
+    if operator == '':
+        AnswerObject.text = 'Я не нашёл тут алгоритмического знака...'
+        return AnswerObject
     digits = message_text.split(operator)
     digits_list = []
 
@@ -67,5 +74,6 @@ def setAnswerObject(message_text, AnswerObject):
         res = digits_list[0] - digits_list[1]
 
     AnswerObject.text = "= " + str(res)
+    operator = ''
     return AnswerObject
 #---------------------------------------------------------------------------

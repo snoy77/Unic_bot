@@ -2,30 +2,46 @@
 import BotStatusPrinter as BSP
 import DataBaseWorker as DB
 import telega_main
+import discord_main as DIS_MAIN
 import threading
 
-telega_tread = threading.Thread(target=telega_main.StartModule)
+_telega_thread = None
+_discord_thread = None
+
+def thread_init():
+    global _telega_thread
+    global _discord_thread
+
+    _telega_thread = threading.Thread(target = telega_main.StartModule)
+    _discord_thread = threading.Thread(target = DIS_MAIN.StartModule)
+def thread_start():
+    global _telega_thread
+    global _discord_thread
+
+    _telega_thread.start()
+    _discord_thread.start()
 
 def StartAll():
-    global telega_tread
-    #Сообщение о запуске бота
-    BSP.SystemPrint('Запуск бота...')
-    DB.StartModule()
-
-    #запуск чат потоков
-    #telega_main.StartModule()
-    telega_tread.start()
+    global _telega_tread
+    global _discord_thread
 
     print()
-    BSP.SystemPrint('Модули активированы')
+    BSP.SystemPrint('Запуск внешних сред чатинга...')
+    print('-----------------------------------------------')
+
+    DB.StartModule()
+
+    #запуск чат-потоков
+    thread_start()
 
 
-
+thread_init()
 StartAll()
+
+
+
 while True:
     pass
 
-    BSP.SystemPrint('РАБОТА БОТА НАЧАЛАСЬ')
+    print('\n=============== РАБОТА БОТА НАЧАЛАСЬ ===============')
     k = input()
-    #if k == "":
-    #    StartAll()
