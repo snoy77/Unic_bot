@@ -1,7 +1,10 @@
 import mysql.connector
 import telegainfo as TI
 from mysql.connector import connect, Error
+import BotStatusPrinter as BSP
 
+_moduleName = 'DataBaseModule'
+BSP.ModuleMes(_moduleName, 'Инициализация функций...')
 def DBPrit(print_id, mes = ""):
     if print_id == 0:
         print("\n----------------MySQL----------------\n")
@@ -15,10 +18,21 @@ def DBPrit(print_id, mes = ""):
         print("Ошибка: " + mes)
         input("Остановка работы по ошибке...")
 
+def CheckConnection():
+    global _moduleName
+    BSP.ModuleMes(_moduleName, 'Проверка соединения...')
+    #проверка соединения
+    result = 1
+    if result == 1:
+        BSP.ModuleMes(_moduleName, 'Проверка соединения... УСПЕХ')
+    else:
+        BSP.ModuleMes(_moduleName, 'Проверка соединения... ПРОВАЛ')
+    return result
 
-def getSiteURL(site_name):
+def CheckTables():
+    pass
+def return_query_result(query_to_bd):
     DBPrit(0)
-    DBPrit(1, "вернуть ссылку")
     try:
         with connect(
             host = TI.DB_host,
@@ -27,7 +41,6 @@ def getSiteURL(site_name):
             database = TI.DB_name,
         ) as connection:
             print("> Успешно: " + str(connection))
-            query_to_bd = "select goung_text, url from sites where name = \'" + site_name + "\'"
             with connection.cursor() as cursor:
                 print("> Запрос: \'" + query_to_bd + "\'...")
                 #Поулчаем резульатт по запросу
@@ -39,8 +52,16 @@ def getSiteURL(site_name):
                 print("> Результат запроса:\n" + str(result))
 
                 DBPrit(10)
-                return result[0]
+                if cursor.rowcount == 0:
+                    return False
+                else:
+                    return result
     except Error as e:
         DBPrit(3, str(e))
     DBPrit(10)
     return False
+BSP.ModuleMes(_moduleName, 'Инициализация функций... УСПЕХ')
+def StartModule():
+    check = CheckConnection()
+    if check == 1:
+        CheckTables()

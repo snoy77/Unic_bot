@@ -1,24 +1,54 @@
 #Модуль осуществляет поиск запросов из списка запросов и выдачу овтета на них
 import DataBaseWorker as DBW
+import serv.SitesModule as SM
+import serv.MathModule as MM
+
+#------------- new algoritm ---------------------------
+serv_modules = [SM, MM]
+
+#объект ответа
+class AnswerClass:
+    text = 'Не понял, разъясни почётче...'
+
+#Возвращает объект ответа
+def returnAnswer(message_text):
+    global modules
+
+    AnswerObject = AnswerClass()
+    answer_methods = []
+
+    #Опрос микросервисов на возможность ответа
+    for e in serv_modules:
+        if e.isItToMe(message_text):
+            answer_methods.append(e.setAnswerObject)
+    if len(answer_methods) == 1:
+        #------ ВРЕМЕННАЯ ПУСТЫШКА -----------
+        answer_methods[0](message_text, AnswerObject)
+        #-------------------------------------
+
+    return AnswerObject
+#------------------------------------------------------
 
 
 def findSiteUrl(arguments):
     site_name = arguments[0]
     result = DBW.getSiteURL(site_name)
     if result == False:
-        return 'Не знаю такой сайт'
+        return ['Не знаю такой сайт']
     else:
-        return '[' + result[0] + '](' + result[1] + ')'
+        return ['[' + result[0] + '](' + result[1] + ')']
 
 QueryAndAnsver = [
 #0 - варианты запроса для овтета
 #1 - ответ на варианты запроса
-[["ответ"], "ответ"],
-[["0"], "1"],
-[["гитхаб", "гит", "твой гит", 'git', 'github'], findSiteUrl, ['git']],
-[['мудл'], findSiteUrl, ['moodle']]
+[["ответ"], 0, ["ответ"]],
+[["0"], 0, ["1"]],
+[["гитхаб", "гит", "твой гит", 'git', 'github'], 1, 0, ['git']],
+[['мудл'], 1, 0 , ['moodle']]
 ]
-
+def returnFunctionObjectForIndex(index):
+    if index == 1:
+        return findSiteUrl
 def returnfastAnsver(message_text):
     #Форматируем текст сообщения для првоерки
     message_text =  message_text.lower().replace('?','')
@@ -26,7 +56,7 @@ def returnfastAnsver(message_text):
     for Q in QueryAndAnsver:
         if message_text in Q[0]:
             #Возвращаем список параметров ответа (в будущем будет больше параметров)
-            if not isinstance(Q[1], list):
-                Q[1] = [Q[1](Q[2])]
-            return Q[1]
+            if not isinstance(Q[2], list):
+                Q[2] = returnFunctionObjectForIndex(Q[1])(Q[3])
+            return Q[2]
     return False
