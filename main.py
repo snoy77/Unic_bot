@@ -33,15 +33,5 @@ def StartAll():
 
     #запуск чат-потоков
     thread_start()
-
-
 thread_init()
 StartAll()
-
-
-
-while True:
-    pass
-
-    print('\n=============== РАБОТА БОТА НАЧАЛАСЬ ===============')
-    k = input()
